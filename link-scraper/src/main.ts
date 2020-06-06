@@ -25,9 +25,7 @@ async function main() {
     const { document } = new JSDOM(text).window;
 
     const posts = [
-      ...((document.querySelectorAll(".aiheet-seksi") as unknown) as Array<
-        Element
-      >),
+      ...((document.querySelectorAll(".uutiset") as unknown) as Array<Element>),
     ];
 
     const formatted = posts.map((p) => {
