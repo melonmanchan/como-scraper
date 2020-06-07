@@ -1,5 +1,7 @@
+import fetch from "node-fetch";
 import mongo from "mongodb";
 import redis from "ioredis";
+import { JSDOM } from "jsdom";
 
 import { Article } from "../../shared/types";
 
@@ -8,6 +10,12 @@ const client = new redis();
 const URL = "mongodb://root:password@localhost:27017";
 const DB_NAME = "articleDB";
 const ARTICLES_COLLECTION = "articles";
+
+type FullArticle =
+  | Article
+  | {
+      contents: string;
+    };
 
 async function main() {
   const mongoClient = await mongo.MongoClient.connect(URL);
@@ -26,7 +34,26 @@ async function main() {
     };
   });
 
-  await collection.insertMany(asJson);
+  const fullArticles: Array<FullArticle> = [];
+
+  for (let i = 0; i < asJson.length; i++) {
+    const article = asJson[i];
+
+    console.log(`downloading article ${i} of ${asJson.length}`);
+
+    const req = await fetch(article.url);
+    const text = await req.text();
+    const { document } = new JSDOM(text).window;
+
+    const articleContents = [...document.querySelector(".main-article p")];
+
+    fullArticles.push({
+      ...article,
+      contents: articleContents.join("\n"),
+    });
+  }
+
+  await collection.insertMany(fullArticles);
 
   await mongoClient.close();
 
