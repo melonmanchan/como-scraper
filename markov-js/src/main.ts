@@ -1,20 +1,9 @@
 import redis from "ioredis";
 import Markov from "markov-strings";
 
-const client = new redis();
+import { Article } from "../../shared/types";
 
-type Article = {
-  id: string;
-  url: string;
-  imageUrl?: string;
-  title: string;
-  blurb: string;
-  releasedAt: string;
-  tags: {
-    href: string;
-    value: string;
-  }[];
-};
+const client = new redis();
 
 async function main() {
   const keys = await client.keys("*");
