@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import redis from "ioredis";
 import { JSDOM } from "jsdom";
 
-const client = new redis(process.env.REDIS_URL || undefined);
+const client = new redis();
 
 process.on("unhandledRejection", (e) => {
   console.error(e); // eslint-disable-line
