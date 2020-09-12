@@ -17,7 +17,7 @@
     "jsdom": "^16.2.2",
     "markov-strings": "^2.1.1",
     "mongodb": "^3.5.8",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
   }
